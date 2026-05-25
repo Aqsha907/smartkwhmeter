@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart KWH Meter</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body{
+      font-family: Arial;
+      background:#f4f4f4;
+      text-align:center;
+      padding:20px;
+    }
+
+    .card{
+      display:inline-block;
+      width:180px;
+      margin:10px;
+      padding:15px;
+      background:white;
+      border-radius:10px;
+      box-shadow:0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .value{
+      font-size:30px;
+      font-weight:bold;
+      color:#007BFF;
+    }
+
+    canvas{
+      background:white;
+      padding:20px;
+      border-radius:10px;
+      margin-top:20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Smart KWH Meter</h1>
+
+<div class="card">
+  <h3>Tegangan</h3>
+  <div class="value" id="voltage">0</div>
+  <p>Volt</p>
+</div>
+
+<div class="card">
+  <h3>Arus</h3>
+  <div class="value" id="current">0</div>
+  <p>Ampere</p>
+</div>
+
+<div class="card">
+  <h3>Daya</h3>
+  <div class="value" id="power">0</div>
+  <p>Watt</p>
+</div>
+
+<canvas id="myChart"></canvas>
+
+<script>
+
+const SUPABASE_URL =
+"https://rfuqlynoyxshgbppomqz.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_UGVgMNfm8j4Bf8N5l3tkEA_0Px95vLa";
+
+async function loadData(){
+
+  const response = await fetch(
+    `${SUPABASE_URL}/rest/v1/monitoring_listrik?select=*&order=created_at.desc&limit=20`,
+    {
+      headers:{
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`
+      }
+    }
+  );
+
+  const data = await response.json();
+
+  if(data.length > 0){
+
+    const latest = data[0];
+
+    document.getElementById("voltage").innerHTML =
+      latest.voltage;
+
+    document.getElementById("current").innerHTML =
+      latest.current;
+
+    document.getElementById("power").innerHTML =
+      latest.power;
+
+    updateChart(data.reverse());
+  }
+}
+
+let chart;
+
+function updateChart(data){
+
+  const labels = data.map(item =>
+    new Date(item.created_at)
+    .toLocaleTimeString()
+  );
+
+  const powerData = data.map(item => item.power);
+
+  if(chart){
+    chart.destroy();
+  }
+
+  const ctx =
+    document.getElementById("myChart");
+
+  chart = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:labels,
+      datasets:[{
+        label:'Daya (W)',
+        data:powerData
+      }]
+    }
+  });
+}
+
+loadData();
+
+setInterval(loadData,5000);
+
+</script>
+
+</body>
+</html>
