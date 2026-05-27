@@ -318,8 +318,8 @@
 
     <div id="dashboardPage">
 
-      <h1 class="page-title">
-        Dashboard
+      <h1 class="page-title" id="greeting">
+        Selamat Datang
       </h1>
 
       <div class="dashboard">
@@ -421,6 +421,40 @@ const ELECTRICITY_PRICE = 1444.7;
 
 let allData = [];
 let chart;
+
+/* ================= GREETING ================= */
+
+function updateGreeting(){
+
+  const hour =
+    new Date().getHours();
+
+  let greeting = "";
+
+  if(hour >= 4 && hour < 11){
+
+    greeting = "Selamat Pagi";
+
+  }else if(hour >= 11 && hour < 15){
+
+    greeting = "Selamat Siang";
+
+  }else if(hour >= 15 && hour < 18){
+
+    greeting = "Selamat Sore";
+
+  }else{
+
+    greeting = "Selamat Malam";
+
+  }
+
+  document.getElementById("greeting")
+    .innerHTML =
+    `${greeting}, Aqsha 👋`;
+}
+
+updateGreeting();
 
 async function loadData(){
 
