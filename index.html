@@ -9,106 +9,6 @@
 
   <style>
 
-    /* ================= MOBILE ================= */
-
-@media (max-width: 768px){
-
-  body{
-    flex-direction:column;
-    overflow:auto;
-  }
-
-  /* SIDEBAR */
-
-  .sidebar{
-    width:100%;
-    height:auto;
-    flex-direction:row;
-    align-items:center;
-    justify-content:space-between;
-    padding:12px 15px;
-  }
-
-  .sidebar-header{
-    border:none;
-    padding:0;
-  }
-
-  .sidebar-header h1{
-    font-size:16px;
-  }
-
-  .sidebar-header p{
-    font-size:12px;
-  }
-
-  .top-sidebar{
-    margin-bottom:0;
-  }
-
-  .menu{
-    position:fixed;
-    top:70px;
-    left:-100%;
-    width:220px;
-    height:100vh;
-    background:#082f6b;
-    padding:20px;
-    transition:0.3s;
-    z-index:999;
-  }
-
-  .sidebar.show-menu .menu{
-    left:0;
-  }
-
-  .menu button{
-    width:100%;
-  }
-
-  /* CONTENT */
-
-  .content{
-    padding:15px;
-  }
-
-  .page-title{
-    font-size:24px;
-    margin-bottom:20px;
-  }
-
-  /* CARD */
-
-  .dashboard{
-    grid-template-columns:1fr;
-  }
-
-  .card{
-    padding:20px;
-  }
-
-  .value{
-    font-size:34px;
-  }
-
-  /* STATS */
-
-  .stats-container{
-    grid-template-columns:1fr;
-  }
-
-  .stats-value{
-    font-size:28px;
-  }
-
-  /* CHART */
-
-  canvas{
-    height:300px !important;
-  }
-
-}
-
     *{
       margin:0;
       padding:0;
@@ -121,7 +21,7 @@
       background:#0f172a;
       color:white;
       min-height:100vh;
-      overflow:hidden;
+      overflow-x:hidden;
     }
 
     /* ================= SIDEBAR ================= */
@@ -133,6 +33,7 @@
       display:flex;
       flex-direction:column;
       padding:15px;
+      flex-shrink:0;
     }
 
     .sidebar.minimized{
@@ -178,6 +79,8 @@
       font-size:14px;
     }
 
+    /* ================= MENU ================= */
+
     .menu{
       margin-top:20px;
       display:flex;
@@ -217,7 +120,7 @@
       white-space:nowrap;
     }
 
-    /* MINIMIZE */
+    /* ================= MINIMIZE ================= */
 
     .sidebar.minimized .sidebar-header{
       display:none;
@@ -241,14 +144,17 @@
 
     .content{
       flex:1;
+      width:100%;
       padding:25px;
       overflow-y:auto;
     }
 
     .page-title{
-      font-size:32px;
+      font-size:36px;
       margin-bottom:25px;
     }
+
+    /* ================= DASHBOARD ================= */
 
     .dashboard{
       display:grid;
@@ -334,6 +240,134 @@
 
     .hidden{
       display:none;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media screen and (max-width: 768px){
+
+      body{
+        flex-direction:column;
+      }
+
+      /* SIDEBAR */
+
+      .sidebar{
+        width:100%;
+        min-height:auto;
+        padding:15px;
+      }
+
+      .sidebar.minimized{
+        width:100%;
+      }
+
+      .top-sidebar{
+        margin-bottom:15px;
+      }
+
+      .sidebar-header{
+        padding-bottom:15px;
+      }
+
+      .sidebar-header h1{
+        font-size:18px;
+      }
+
+      .sidebar-header p{
+        font-size:12px;
+      }
+
+      /* MENU */
+
+      .menu{
+        flex-direction:row;
+        overflow-x:auto;
+        overflow-y:hidden;
+        gap:10px;
+        padding-bottom:5px;
+      }
+
+      .menu::-webkit-scrollbar{
+        height:4px;
+      }
+
+      .menu::-webkit-scrollbar-thumb{
+        background:#2563eb;
+        border-radius:10px;
+      }
+
+      .menu button{
+        min-width:max-content;
+        flex:none;
+        padding:12px 16px;
+        font-size:14px;
+      }
+
+      .sidebar.minimized .menu-text{
+        display:inline;
+      }
+
+      .sidebar.minimized .menu button{
+        justify-content:flex-start;
+        padding:12px 16px;
+      }
+
+      .sidebar.minimized .icon{
+        font-size:20px;
+      }
+
+      /* CONTENT */
+
+      .content{
+        width:100%;
+        padding:15px;
+        overflow:visible;
+      }
+
+      .page-title{
+        font-size:28px;
+        margin-bottom:20px;
+      }
+
+      /* DASHBOARD */
+
+      .dashboard{
+        grid-template-columns:1fr;
+      }
+
+      .card{
+        padding:20px;
+      }
+
+      .value{
+        font-size:34px;
+      }
+
+      /* STATS */
+
+      .stats-container{
+        grid-template-columns:1fr;
+      }
+
+      .stats-value{
+        font-size:28px;
+      }
+
+      /* CHART */
+
+      .chart-container{
+        padding:15px;
+      }
+
+      .chart-title{
+        font-size:20px;
+      }
+
+      canvas{
+        height:300px !important;
+      }
+
     }
 
   </style>
@@ -522,39 +556,7 @@ const ELECTRICITY_PRICE = 1444.7;
 let allData = [];
 let chart;
 
-/* ================= GREETING ================= */
-
-function updateGreeting(){
-
-  const hour =
-    new Date().getHours();
-
-  let greeting = "";
-
-  if(hour >= 4 && hour < 11){
-
-    greeting = "Selamat Pagi";
-
-  }else if(hour >= 11 && hour < 15){
-
-    greeting = "Selamat Siang";
-
-  }else if(hour >= 15 && hour < 18){
-
-    greeting = "Selamat Sore";
-
-  }else{
-
-    greeting = "Selamat Malam";
-
-  }
-
-  document.getElementById("greeting")
-    .innerHTML =
-    `${greeting}, Aqsha 👋`;
-}
-
-updateGreeting();
+/* ================= LOAD DATA ================= */
 
 async function loadData(){
 
@@ -576,7 +578,7 @@ async function loadData(){
 
     const latest = data[data.length - 1];
 
-    /* VALUE DASHBOARD */
+    /* DASHBOARD VALUE */
 
     document.getElementById("voltage").innerHTML =
       parseFloat(latest.voltage).toFixed(1);
@@ -587,7 +589,7 @@ async function loadData(){
     document.getElementById("power").innerHTML =
       parseFloat(latest.power).toFixed(1);
 
-    /* PRAKIRAAN TAGIHAN */
+    /* TAGIHAN */
 
     let totalKwh = 0;
 
@@ -607,16 +609,14 @@ async function loadData(){
   }
 }
 
-function showPage(type, element){
+/* ================= PAGE ================= */
 
-  /* ACTIVE MENU */
+function showPage(type, element){
 
   document.querySelectorAll(".menu button")
     .forEach(btn => btn.classList.remove("active"));
 
   element.classList.add("active");
-
-  /* DASHBOARD */
 
   if(type === "dashboard"){
 
@@ -629,8 +629,6 @@ function showPage(type, element){
     return;
   }
 
-  /* DETAIL PAGE */
-
   document.getElementById("dashboardPage")
     .classList.add("hidden");
 
@@ -639,6 +637,8 @@ function showPage(type, element){
 
   updateChart(type);
 }
+
+/* ================= CHART ================= */
 
 function updateChart(type){
 
@@ -651,7 +651,7 @@ function updateChart(type){
     parseFloat(item[type])
   );
 
-  /* HITUNG MIN MAX CURRENT */
+  /* MIN MAX CURRENT */
 
   const min =
     Math.min(...values);
@@ -678,7 +678,7 @@ function updateChart(type){
     unit = " W";
   }
 
-  /* TAMPILKAN STATS */
+  /* STATS */
 
   document.getElementById("minValue")
     .innerHTML =
@@ -715,7 +715,7 @@ function updateChart(type){
   document.getElementById("chartTitle")
     .innerHTML = title;
 
-  /* DESTROY CHART */
+  /* DESTROY */
 
   if(chart){
     chart.destroy();
@@ -747,6 +747,8 @@ function updateChart(type){
     options:{
 
       responsive:true,
+
+      maintainAspectRatio:false,
 
       plugins:{
         legend:{
@@ -780,20 +782,53 @@ function updateChart(type){
   });
 }
 
+/* ================= SIDEBAR ================= */
+
 function toggleSidebar(){
 
-  if(window.innerWidth <= 768){
-
-    document.getElementById("sidebar")
-      .classList.toggle("show-menu");
-
-  }else{
+  if(window.innerWidth > 768){
 
     document.getElementById("sidebar")
       .classList.toggle("minimized");
 
   }
 }
+
+/* ================= GREETING ================= */
+
+function updateGreeting(){
+
+  const hour =
+    new Date().getHours();
+
+  let greeting = "";
+
+  if(hour >= 4 && hour < 11){
+
+    greeting = "Selamat Pagi";
+
+  }else if(hour >= 11 && hour < 15){
+
+    greeting = "Selamat Siang";
+
+  }else if(hour >= 15 && hour < 18){
+
+    greeting = "Selamat Sore";
+
+  }else{
+
+    greeting = "Selamat Malam";
+
+  }
+
+  document.getElementById("greeting")
+    .innerHTML =
+    `${greeting}, Aqsha 👋`;
+}
+
+/* ================= INIT ================= */
+
+updateGreeting();
 
 loadData();
 
