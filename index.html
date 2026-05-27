@@ -9,6 +9,106 @@
 
   <style>
 
+    /* ================= MOBILE ================= */
+
+@media (max-width: 768px){
+
+  body{
+    flex-direction:column;
+    overflow:auto;
+  }
+
+  /* SIDEBAR */
+
+  .sidebar{
+    width:100%;
+    height:auto;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 15px;
+  }
+
+  .sidebar-header{
+    border:none;
+    padding:0;
+  }
+
+  .sidebar-header h1{
+    font-size:16px;
+  }
+
+  .sidebar-header p{
+    font-size:12px;
+  }
+
+  .top-sidebar{
+    margin-bottom:0;
+  }
+
+  .menu{
+    position:fixed;
+    top:70px;
+    left:-100%;
+    width:220px;
+    height:100vh;
+    background:#082f6b;
+    padding:20px;
+    transition:0.3s;
+    z-index:999;
+  }
+
+  .sidebar.show-menu .menu{
+    left:0;
+  }
+
+  .menu button{
+    width:100%;
+  }
+
+  /* CONTENT */
+
+  .content{
+    padding:15px;
+  }
+
+  .page-title{
+    font-size:24px;
+    margin-bottom:20px;
+  }
+
+  /* CARD */
+
+  .dashboard{
+    grid-template-columns:1fr;
+  }
+
+  .card{
+    padding:20px;
+  }
+
+  .value{
+    font-size:34px;
+  }
+
+  /* STATS */
+
+  .stats-container{
+    grid-template-columns:1fr;
+  }
+
+  .stats-value{
+    font-size:28px;
+  }
+
+  /* CHART */
+
+  canvas{
+    height:300px !important;
+  }
+
+}
+
     *{
       margin:0;
       padding:0;
@@ -682,8 +782,17 @@ function updateChart(type){
 
 function toggleSidebar(){
 
-  document.getElementById("sidebar")
-    .classList.toggle("minimized");
+  if(window.innerWidth <= 768){
+
+    document.getElementById("sidebar")
+      .classList.toggle("show-menu");
+
+  }else{
+
+    document.getElementById("sidebar")
+      .classList.toggle("minimized");
+
+  }
 }
 
 loadData();
