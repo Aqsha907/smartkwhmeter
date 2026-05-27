@@ -370,6 +370,24 @@
 
     }
 
+    /* ================= MOBILE COLLAPSE ================= */
+
+    @media screen and (max-width: 768px){
+
+      .sidebar.mobile-collapse .sidebar-header{
+        display:none;
+      }
+
+      .sidebar.mobile-collapse .menu{
+        display:none;
+      }
+
+      .sidebar.mobile-collapse{
+        padding-bottom:15px;
+      }
+
+    }
+
   </style>
 </head>
 
@@ -786,10 +804,16 @@ function updateChart(type){
 
 function toggleSidebar(){
 
-  if(window.innerWidth > 768){
+  const sidebar =
+    document.getElementById("sidebar");
 
-    document.getElementById("sidebar")
-      .classList.toggle("minimized");
+  if(window.innerWidth <= 768){
+
+    sidebar.classList.toggle("mobile-collapse");
+
+  }else{
+
+    sidebar.classList.toggle("minimized");
 
   }
 }
