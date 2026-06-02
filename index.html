@@ -388,10 +388,29 @@
 
     }
 
+    #connectionStatus{
+      position:fixed;
+      top:15px;
+      right:15px;
+      background:#22c55e;
+      color:white;
+      padding:10px 15px;
+      border-radius:12px;
+      font-size:14px;
+      z-index:1000;
+    }
+
+
   </style>
 </head>
 
 <body>
+
+  <!-- STATUS KONEKSI -->
+
+  <div id="connectionStatus">
+  🟢 Terhubung
+  </div>
 
   <!-- SIDEBAR -->
 
@@ -857,6 +876,49 @@ updateGreeting();
 loadData();
 
 setInterval(loadData,5000);
+
+/* ================= STATUS KONEKSI ================= */
+
+function updateConnection(){
+
+  const status =
+    document.getElementById(
+      "connectionStatus"
+    );
+
+  if(navigator.onLine){
+
+    status.innerHTML =
+      "🟢 Terhubung";
+
+    status.style.background =
+      "#22c55e";
+
+    loadData();
+
+  }else{
+
+    status.innerHTML =
+      "🔴 Koneksi Terputus";
+
+    status.style.background =
+      "#ef4444";
+
+  }
+
+}
+
+window.addEventListener(
+  "online",
+  updateConnection
+);
+
+window.addEventListener(
+  "offline",
+  updateConnection
+);
+
+updateConnection();
 
 </script>
 
