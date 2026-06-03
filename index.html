@@ -588,7 +588,7 @@ const SUPABASE_KEY =
 "sb_publishable_UGVgMNfm8j4Bf8N5l3tkEA_0Px95vLa";
 
 /* Tarif listrik */
-const ELECTRICITY_PRICE = 1352;
+const ELECTRICITY_PRICE = 1444.7;
 
 let allData = [];
 let chart;
@@ -615,8 +615,6 @@ async function loadData(){
 
     const latest = data[data.length - 1];
 
-    /* DASHBOARD VALUE */
-
     document.getElementById("voltage").innerHTML =
       parseFloat(latest.voltage).toFixed(1);
 
@@ -628,25 +626,23 @@ async function loadData(){
 
     /* TAGIHAN */
 
-  const latestData = allData[allData.length - 1];
-
-  const totalKwh =
-    parseFloat(latestData.energy);
-
-  const estimatedBill =
-    totalKwh * ELECTRICITY_PRICE;
-
-    });
+    const totalKwh =
+      parseFloat(latest.energy || 0);
 
     const estimatedBill =
       totalKwh * ELECTRICITY_PRICE;
 
     document.getElementById("bill").innerHTML =
-      "Rp " + estimatedBill.toFixed(0);
-
+      new Intl.NumberFormat(
+        "id-ID",
+        {
+          style:"currency",
+          currency:"IDR",
+          maximumFractionDigits:0
+        }
+      ).format(estimatedBill);
   }
 }
-
 /* ================= PAGE ================= */
 
 function showPage(type, element){
