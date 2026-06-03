@@ -514,9 +514,9 @@
         </div>
 
         <div class="card">
-          <h2>Prakiraan Tagihan Bulanan</h2>
-          <div class="value" id="bill">0</div>
-          <div class="unit">Rupiah</div>
+          <h2>Total Energi</h2>
+          <div class="value" id="energy">0</div>
+          <div class="unit">kWh</div>
         </div>
 
       </div>
@@ -624,19 +624,11 @@ async function loadData(){
     document.getElementById("power").innerHTML =
       parseFloat(latest.power).toFixed(1);
 
-/* BIAYA DARI ESP32 */
+/* TOTAL ENERGI */
 
-document.getElementById("bill").innerHTML =
-new Intl.NumberFormat(
-  "id-ID",
-  {
-    style:"currency",
-    currency:"IDR",
-    maximumFractionDigits:0
-  }
-).format(
-  parseFloat(latest.cost || 0)
-);
+document.getElementById("energy").innerHTML =
+  parseFloat(latest.energy || 0)
+  .toFixed(2);
   }
 }
 /* ================= PAGE ================= */
