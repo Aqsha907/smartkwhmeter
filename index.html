@@ -628,12 +628,13 @@ async function loadData(){
 
     /* TAGIHAN */
 
-    let totalKwh = 0;
+  const latestData = allData[allData.length - 1];
 
-    allData.forEach(item => {
+  const totalKwh =
+    parseFloat(latestData.energy);
 
-      totalKwh +=
-        parseFloat(item.power) / 1000;
+  const estimatedBill =
+    totalKwh * ELECTRICITY_PRICE;
 
     });
 
